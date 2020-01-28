@@ -313,8 +313,8 @@ def plot(function_or_mesh,
             cmap = kwargs.pop("cmap", cm.coolwarm)
             pivot = kwargs.pop("pivot", "mid")
             mappable = axes.quiver(X, Y, U, V, C, cmap=cmap, pivot=pivot, **kwargs)
-            plt.colorbar(mappable)
-            return axes
+            cb = plt.colorbar(mappable)
+            return axes, cb
         return two_dimension_plot(function, num_sample_points,
                                   axes, plot3d=plot3d, contour=kwargs.pop("contour", False),
                                   **kwargs)
@@ -513,6 +513,7 @@ def two_dimension_plot(function,
     triangulation, Z = _two_dimension_triangle_func_val(function,
                                                         num_sample_points)
 
+    cb = None
     if axes is None:
         figure = plt.figure()
         if plot3d:
@@ -529,7 +530,7 @@ def two_dimension_plot(function,
                                          cmap=cmap, antialiased=False,
                                          shade=False, **kwargs)
         if cmap is not None:
-            plt.colorbar(mappable)
+            cb = plt.colorbar(mappable)
         return axes
     else:
         if contour:
@@ -538,8 +539,8 @@ def two_dimension_plot(function,
         else:
             mappable = axes.tripcolor(triangulation, Z, cmap=cmap, **kwargs)
         if cmap is not None:
-            plt.colorbar(mappable)
-    return axes
+            cb = plt.colorbar(mappable)
+    return axes, cb
 
 
 def _bezier_calculate_points(function):
